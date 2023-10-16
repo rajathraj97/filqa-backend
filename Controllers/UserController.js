@@ -47,6 +47,8 @@ userController.login = async (req, res) => {
         .catch((e) => {
           console.log(e);
         });
+    }else{
+      res.json({error:"invalid password or email"})
     }
     console.log(verifyPassword);
   } catch (e) {
@@ -170,6 +172,20 @@ userController.updateData = async(req,res)=>{
       res.json(userDataUpdate)
     }
 
+  }
+  catch(e){
+    res.json(e)
+  }
+}
+
+userController.profilepicture = async(req,res)=>{
+  try{
+    const body = pick(req.body,['email'])
+    const file = req.file
+    const userData = await User.findOneAndUpdate({email:body.email},{image:`./images/${file.filename}`},{new:true})
+
+    res.json(userData)
+    console.log(file)
   }
   catch(e){
     res.json(e)
